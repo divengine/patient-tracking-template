@@ -1,0 +1,42 @@
+name: Archive issue to file
+
+on:
+  issues:
+    types: [opened, edited]
+
+jobs:
+  archive:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up date and filename
+        id: vars
+        run: |
+          # Get today's date (based on issue update)
+          DATE=$(date -u +"%Y-%m-%d")
+          FILE="issues/$DATE/issue-${{ github.event.issue.number }}.md"
+          mkdir -p "issues/$DATE"
+          echo "date=$DATE" >> $GITHUB_OUTPUT
+          echo "file=$FILE" >> $GITHUB_OUTPUT
+
+      - name: Write issue content to file
+        run: |
+          echo "# ${{ github.event.issue.title }}" > "${{ steps.vars.outputs.file }}"
+          echo "" >> "${{ steps.vars.outputs.file }}"
+          echo "Created by: ${{ github.event.issue.user.login }}" >> "${{ steps.vars.outputs.file }}"
+          echo "Created at: ${{ github.event.issue.created_at }}" >> "${{ steps.vars.outputs.file }}"
+          echo "Last edited: ${{ github.event.issue.updated_at }}" >> "${{ steps.vars.outputs.file }}"
+          echo "" >> "${{ steps.vars.outputs.file }}"
+          echo "---" >> "${{ steps.vars.outputs.file }}"
+          echo "" >> "${{ steps.vars.outputs.file }}"
+          echo "${{ github.event.issue.body }}" >> "${{ steps.vars.outputs.file }}"
+
+      - name: Commit and push
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git add "${{ steps.vars.outputs.file }}"
+          git commit -m "Archived issue #${{ github.event.issue.number }} on ${{ steps.vars.outputs.date }}"
+          git push
