@@ -1,0 +1,66 @@
+name: Medical Visit
+description: Log a new consultation or follow-up visit
+title: "[Visit] YYYY-MM-DD – Reason"
+labels: [visit]
+body:
+  - type: input
+    id: date
+    attributes:
+      label: Date of Visit
+      placeholder: YYYY-MM-DD
+    validations:
+      required: true
+
+  - type: textarea
+    id: reason
+    attributes:
+      label: Reason for Visit
+      description: Brief description of the patient's complaint or symptoms
+      placeholder: e.g. Persistent headache for 3 days
+    validations:
+      required: true
+
+  - type: textarea
+    id: observations
+    attributes:
+      label: Observations
+      description: Clinical findings, signs, or relevant notes
+      placeholder: Physical examination, vital signs, other relevant notes
+
+  - type: textarea
+    id: diagnosis
+    attributes:
+      label: Diagnosis / Impression
+      description: Current working diagnosis or clinical impression
+      placeholder: e.g. Suspected migraine, rule out tension headache
+
+  - type: textarea
+    id: treatment
+    attributes:
+      label: Treatment Plan
+      description: Medications, instructions, referrals, or other recommendations
+      placeholder: Sumatriptan 50mg as needed. Schedule neurology consult.
+
+  - type: textarea
+    id: followup
+    attributes:
+      label: Next Steps / Follow-Up
+      description: Suggested time for next visit or tests to be done
+      placeholder: Re-evaluate in 2 weeks
+
+  - type: checkboxes
+    id: attachments
+    attributes:
+      label: Attachments (optional)
+      description: Check if any of the following will be added separately
+      options:
+        - label: Lab results
+        - label: Imaging scans
+        - label: Referral letter
+        - label: Consent form
+
+  - type: input
+    id: assigned_doctor
+    attributes:
+      label: Responsible Doctor
+      placeholder: Dr. Smith
